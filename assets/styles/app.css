@@ -1,3 +1,16 @@
 body {
-    background-color: skyblue;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.h-fit {
+    height: fit-content;
+}
+
+.w-fit {
+    width: fit-content;
+}
+.test {
+    flex: 1;
 }

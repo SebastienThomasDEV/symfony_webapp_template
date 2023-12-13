@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AuthController!{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center test flex-column">
+        <div class="invalid">{{ message }}</div>
+        <form class="px-4 shadow-sm p-3 bg-white rounded" method="post" action="{{ path('app_register') }}">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input name="_email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input name="_password" type="password" class="form-control mb-1" id="password" placeholder="Mot de passe" >
+                <input name="password_confirm" type="password" class="form-control" id="password" placeholder="Confirmation">
+            </div>
+            <button type="submit" class="btn btn-primary">Inscription</button>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <div class="container d-flex justify-content-center align-items-center test">
+        <form class="px-4 shadow-sm p-3 bg-white rounded" method="post" action="{{ path('app_login') }}">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input name="_username" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input name="_password" type="password" class="form-control" id="password">
+                <div id="passwordHelp" class="form-text">Au moins 8 caractères, 1 chiffre et une majuscule</div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}
+
