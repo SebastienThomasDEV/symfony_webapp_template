@@ -20,9 +20,9 @@ class AuthController extends AbstractController
     public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, Security $security): Response
     {
         $message = '';
+            $response = $this->checkForm($request->request->all(), $em, $request);
         if ($request->isMethod('POST')) {
-            $message = $this->checkForm($request->request->all(), $em, $request);
-            if ($message === true) {
+            if ($response['isValid']) {
                 $user = new User();
                 $user->setEmail($request->request->get('_email'));
                 $user->setPassword($passwordHasher->hashPassword($user, $request->request->get('_password')));
@@ -32,19 +32,20 @@ class AuthController extends AbstractController
                 $security->login($user);
                 $this->addFlash('success', 'Votre compte a bien été créé');
                 return $this->redirectToRoute('app_dashboard');
-            } else {
-                $this->addFlash('error', $message);
             }
         }
         return $this->render('auth/register.html.twig', [
             'controller_name' => 'AuthController',
-            'message' => $message === true ? '' : $message
+            'response' => $response
         ]);
     }
 
     #[Route('/login', name: 'app_login')]
-    public function login(): Response
+    public function login(Request $request): Response
     {
+        if ($this->getUser() instanceof PasswordAuthenticatedUserInterface) {
+            return $this->redirectToRoute('app_dashboard');
+        }
         return $this->render('auth/login.html.twig', [
             'controller_name' => 'AuthController',
         ]);
@@ -57,30 +58,46 @@ class AuthController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    public function checkForm(array $attrs, EntityManagerInterface $em, Request $request): bool|string
+    public function checkForm(array $attrs, EntityManagerInterface $em, Request $request): array
     {
-        $message = '';
-        if (is_null($attrs['_email']) || is_null($attrs['_password'])) {
-            $message = "Veuillez remplir tous les champs";
+        $response = [
+            'isValid' => true,
+            'isSubmitted' => $request->isMethod('POST'),
+            'email' => "",
+            'password' => "",
+        ];
+        if ($response['isSubmitted'] === false) {
+            return $response;
         }
-        if ($attrs['_password'] !== $attrs['password_confirm']) {
-            $message = "Les mots de passe ne correspondent pas";
+        if (strlen($attrs['_password']) < 5) {
+            $response['password'] = "The password must be at least 5 characters long";
+            $response['isValid'] = false;
         }
-        if ($em->getRepository(User::class)->findOneBy(['email' => $request->request->get('_email')])) {
-            $message = "Création de compte impossible";
+        if (strlen($attrs['_password']) > 50) {
+            $response['password'] = "The password must be less than 50 characters long";
+            $response['isValid'] = false;
         }
         if (preg_match('/[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+/', $attrs['_email']) === 0) {
-            $message = "Veuillez entrer une adresse email valide";
+            $response['email'] = "The email is not valid";
+            $response['isValid'] = false;
         }
-        if (strlen($attrs['_password']) < 8) {
-            $message = "Le mot de passe doit contenir au moins 8 caractères";
+        if ($em->getRepository(User::class)->findOneBy(['email' => $attrs['_email']])) {
+            $response['email'] = "This email is already used";
+            $response['isValid'] = false;
         }
-        if (strlen($attrs['_password']) > 255) {
-            $message = "Le mot de passe doit contenir au maximum 255 caractères";
+        if ($attrs['_password'] !== $attrs['_password_confirm']) {
+            $response['password'] = "The passwords does not match";
+            $response['isValid'] = false;
         }
-        if (strlen($attrs['_email']) > 255) {
-            $message = "L'adresse email doit contenir au maximum 255 caractères";
+
+        if ($attrs['_email'] === '') {
+            $response['email'] = "You must fill the email field";
+            $response['isValid'] = false;
         }
-        return $message === '' ? true : $message;
+        if ($attrs['_password'] === '') {
+            $response['password'] = "You must fill the password field";
+            $response['isValid'] = false;
+        }
+        return $response;
     }
 }

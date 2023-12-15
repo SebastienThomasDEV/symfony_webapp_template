@@ -5,43 +5,87 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon"
               href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-                {% block stylesheets %}
-        {#            {{ encore_entry_link_tags('app') }} #}
-                    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-        {#            {{ ux_controller_link_tags() }} #}
-                {% endblock %}
+        {% block stylesheets %}
+            {#            {{ encore_entry_link_tags('app') }} #}
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+            {#            {{ ux_controller_link_tags() }} #}
+        {% endblock %}
 
         {#        {% block javascripts %} #}
         {#            {{ encore_entry_script_tags('app') }} #}
         {#            {{ importmap() }} #}
         {#        {% endblock %} #}
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-              crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-                crossorigin="anonymous"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/motion-tailwind/motion-tailwind.css"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/gh/Loopple/loopple-public-assets@main/riva-dashboard-tailwind/riva-dashboard.css"
+              rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar" style="background-color: #e3f2fd;">
-            <div class="container-fluid justify-content-between">
-                <a class="navbar-brand">Acceuil</a>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <div class="d-flex gap-3">
-                    <p class="navbar-brand">{{ app.user.email }}</p>
-                    <a class="navbar-brand" href="{{ path('app_logout') }}">Déconnexion</a>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="container flex flex-col mx-auto bg-white">
+                <aside class="group/sidebar flex flex-col shrink-0 lg:w-[300px] w-[250px] transition-all duration-300 ease-in-out m-0 fixed z-40 inset-y-0 left-0 bg-white border-r border-r-dashed border-r-neutral-200 sidenav fixed-start loopple-fixed-start"
+                       id="sidenav-main">
 
+                    <div class="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
+                    <div class="flex items-center justify-between px-8 py-5">
+                        <div class="flex items-center mr-5">
+                            <div class="mr-5">
+                                <div class="inline-block relative shrink-0 cursor-pointer rounded-[.95rem]">
+                                    <img class="w-[40px] h-[40px] shrink-0 inline-block rounded-[.95rem]"
+                                         src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/riva-dashboard-tailwind/img/avatars/avatar1.jpg"
+                                         alt="avatar image">
+                                </div>
+                            </div>
+                            <div class="mr-2 ">
+                                <a href="javascript:void(0)"
+                                   class="dark:hover:text-primary hover:text-primary transition-colors duration-200 ease-in-out text-[1.075rem] font-medium dark:text-neutral-400/90 text-secondary-inverse">{{ app.user.email }}</a>
+                                <span class="text-secondary-dark dark:text-stone-500 font-medium block text-[0.85rem]">SEO Manager</span>
+                            </div>
+                        </div>
+                        <a class="inline-flex relative items-center group justify-end text-base font-medium leading-normal text-center align-middle cursor-pointer rounded-[.95rem] transition-colors duration-150 ease-in-out text-dark bg-transparent shadow-none border-0"
+                           href="{{ path('app_logout') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                            </svg>
+
+                        </a>
                     </div>
-                {% else %}
-                    <div class="d-flex gap-3">
-                        <a class="navbar-brand" href="{{ path('app_login') }}">Connexion</a>
-                        <a class="navbar-brand" href="{{ path('app_register') }}">Inscription</a>
-
+                    <div class="hidden border-b border-dashed lg:block dark:border-neutral-700/70 border-neutral-200"></div>
+                    <div class="relative pl-3 my-5 overflow-y-scroll">
+                        <div class="flex flex-col w-full font-medium">
+                            <!-- menu item -->
+                            <div>
+                        <span class="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                            <a href="javascript:;"
+                               class="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Fil d'actualité</a>
+                        </span>
+                            </div>
+                            <div>
+                        <span class="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                            <a href="javascript:;"
+                               class="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Favoris</a>
+                        </span>
+                            </div>
+                            <div>
+                        <span class="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                            <a href="javascript:;"
+                               class="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark">Mes articles</a>
+                        </span>
+                            </div>
+                            <div>
+                        <span class="select-none flex items-center px-4 py-[.775rem] cursor-pointer my-[.4rem] rounded-[.95rem]">
+                            <a href="javascript:;"
+                               class="flex items-center flex-grow text-[1.15rem] dark:text-neutral-400/75 text-stone-500 hover:text-dark"></a>
+                        </span>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
-
+                </aside>
             </div>
-        </nav>
+        {% endif %}
         {% block body %}{% endblock %}
     </body>
 </html>

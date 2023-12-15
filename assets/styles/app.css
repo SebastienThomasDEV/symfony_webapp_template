@@ -4,13 +4,6 @@ body {
     flex-direction: column;
 }
 
-.h-fit {
-    height: fit-content;
-}
-
-.w-fit {
-    width: fit-content;
-}
-.test {
-    flex: 1;
+.invalid-feedback {
+    border: 1px solid red;
 }
