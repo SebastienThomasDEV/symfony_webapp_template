@@ -41,11 +41,8 @@ class AuthController extends AbstractController
     }
 
     #[Route('/login', name: 'app_login')]
-    public function login(Request $request): Response
+    public function login(Request $request, Security $security): Response
     {
-        if ($this->getUser() instanceof PasswordAuthenticatedUserInterface) {
-            return $this->redirectToRoute('app_dashboard');
-        }
         return $this->render('auth/login.html.twig', [
             'controller_name' => 'AuthController',
         ]);

@@ -15,18 +15,11 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function home(ParameterBagInterface $parameterBag): Response
     {
-        $parser = new Parser();
-        $pdf = $parser->parseFile($parameterBag->get('kernel.project_dir') . '/public/test.pdf');
-        $forms = [];
-        foreach ($pdf->getObjects() as $obj) {
-            if (is_a($obj, 'Smalot\PdfParser\XObject\Form') && $obj->getText() !== ' ' && trim($obj->getText()) !== '4') {
-//                $forms["{$obj->getBBox()->xMin}x{$obj->getBBox()->yMin}"] = $obj->getText();
-//                preg_replace('/\t+/', '', trim($obj->getText()));
-                $forms[] = trim($obj->getText());
-            }
+        if ($this->getUser())
+        {
+            return $this->redirectToRoute('app_dashboard');
         }
-        dd($forms);
-        return $this->render('test.html.twig', [
+        return $this->render('home/home.html.twig', [
             'controller_name' => 'HomeController',
         ]);
     }
