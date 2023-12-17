@@ -1,3 +1,9 @@
+:root {
+    --loader-background-color: #EEEEEE;
+    --loader-highlight-color: #DEDEDE;
+}
+
+
 body {
     min-height: 100vh;
     display: flex;
@@ -6,4 +12,27 @@ body {
 
 .invalid-feedback {
     border: 1px solid red;
+}
+
+.card {
+
+}
+
+.skeleton-loader {
+    width: fit-content;
+    background: linear-gradient(90deg, var(--loader-background-color) 25%, var(--loader-highlight-color) 50%, var(--loader-background-color) 75%);
+    background-size: 200% 100%;
+    animation: loading 2s infinite ease-in-out;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    height: 16px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
